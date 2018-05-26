@@ -9,11 +9,11 @@
 import UIKit
 
 enum ShipType {
-    case PatrolBoat
-    case Submarine
-    case Cruiser
-    case Battleship
-    case Carrier
+    case patrolBoat
+    case submarine
+    case cruiser
+    case battleship
+    case carrier
 }
 
 class Ship: NSObject {
@@ -31,21 +31,38 @@ class Ship: NSObject {
         self.hitSegments = []
         
         switch type {
-        case .PatrolBoat:
+        case .patrolBoat:
             self.length = 2
             break
-        case .Carrier:
+        case .carrier:
             self.length = 5
             break
-        case .Cruiser:
+        case .cruiser:
             self.length = 3
             break
-        case .Battleship:
+        case .battleship:
             self.length = 4
             break
-        case .Submarine:
+        case .submarine:
             self.length = 3
             break
+        }
+    }
+    
+    func saveShipSegments(shipView: UIView) {
+        
+        let isRotated = shipView.frame.size.width < shipView.frame.size.height
+       
+        let x = shipView.frame.origin.x / CELLSIZE;
+        let y = shipView.frame.origin.y / CELLSIZE;
+        
+        let firstSegment = y * 10 + x;
+        var i = 0
+        
+        while (i < self.length)  {
+            let segment = isRotated ? firstSegment + (CGFloat.init(i) * 10) : firstSegment + CGFloat.init(i)
+            self.segments.append(segment)
+            i += 1
         }
     }
 }

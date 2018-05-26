@@ -8,11 +8,12 @@
 
 import UIKit
 
-class GameViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+let CELLSIZE: CGFloat = 45.0 
 
+
+
+class GameViewController: UIViewController {
     
-
-    @IBOutlet weak var gameCollectionView: UICollectionView!
     override func viewDidLoad() {
         super.viewDidLoad()
 

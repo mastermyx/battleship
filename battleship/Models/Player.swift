@@ -8,6 +8,18 @@
 
 import UIKit
 
-class Player: NSObject {
 
+
+class Player: NSObject {
+    
+    var name: String
+    var id: String
+    var ships: Array<Any>
+    
+    init(withName name: String) {
+        self.name = name
+        self.id = "0000000"
+        self.ships = []
+    }
+    
 }

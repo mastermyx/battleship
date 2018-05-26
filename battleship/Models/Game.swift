@@ -7,6 +7,20 @@
 //
 
 import UIKit
+enum GameEnd {
+    case GameOver
+    case GameQuit
+}
+
+enum GameState {
+    case waiting
+    case placing
+    case playing
+    case enemyPlaying
+    case gameOver
+}
+
+
 
 class Game: NSObject {
 
