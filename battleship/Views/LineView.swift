@@ -11,6 +11,8 @@ import UIKit
 class LineView: UIView {
 
     override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        
         let currentContext = UIGraphicsGetCurrentContext()
         currentContext!.saveGState()
         

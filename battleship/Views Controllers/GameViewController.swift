@@ -14,6 +14,13 @@ let CELLSIZE: CGFloat = 45.0
 
 class GameViewController: UIViewController {
     
+    @IBOutlet weak var shipViewCarrier: ShipView!
+    @IBOutlet weak var shipViewCruiser: ShipView!
+    @IBOutlet weak var shipViewSubmarine: ShipView!
+    @IBOutlet weak var shipViewPatrolBoat: ShipView!
+    @IBOutlet weak var shipViewBattleship: ShipView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -25,15 +32,10 @@ class GameViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    func setShips() {
+        
     }
-    */
+
 
 }

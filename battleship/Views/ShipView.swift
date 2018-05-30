@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import Foundation
 
-class ShipView: UIView {
+class ShipView: UIImageView {
 
     var isRotated = false
     var shipType: ShipType?

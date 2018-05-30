@@ -17,10 +17,7 @@ enum GameState {
     case placing
     case playing
     case enemyPlaying
-    case gameOver
 }
-
-
 
 class Game: NSObject {
 

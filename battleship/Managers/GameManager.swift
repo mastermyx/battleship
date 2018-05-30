@@ -8,6 +8,12 @@
 
 import UIKit
 
-class GameManager: NSObject {
 
+class GameManager: NSObject {
+    
+    var sharedInstance = GameManager()
+    
+    
+    
+    
 }

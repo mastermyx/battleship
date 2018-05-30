@@ -9,5 +9,7 @@
 import UIKit
 
 class SocketManager: NSObject {
-
+    var sharedManager = SocketManager()
+    
+    
 }

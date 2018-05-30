@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="ipad9_7" orientation="landscape">
         <adaptation id="fullscreen"/>
     </device>
@@ -377,14 +377,91 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.97254901959999995" green="0.90980392160000001" blue="0.10980392160000001" alpha="0.26907641267123289" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sdE-Yl-cTi">
+                                <rect key="frame" x="28" y="620" width="479" height="98"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="cruiser" translatesAutoresizingMaskIntoConstraints="NO" id="5XJ-0P-pkX" customClass="ShipView" customModule="battleship" customModuleProvider="target">
+                                        <rect key="frame" x="31" y="53" width="135" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="vz4-Ke-9EP" appends="YES" id="HL0-Dr-wS6"/>
+                                            <outletCollection property="gestureRecognizers" destination="f4E-7G-TA3" appends="YES" id="zf9-lF-Cza"/>
+                                        </connections>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="submarine" translatesAutoresizingMaskIntoConstraints="NO" id="phN-dC-9ib" customClass="ShipView" customModule="battleship" customModuleProvider="target">
+                                        <rect key="frame" x="198" y="53" width="135" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="1Vl-uN-6B6" appends="YES" id="rIM-Yg-c7K"/>
+                                            <outletCollection property="gestureRecognizers" destination="jnr-h5-7Q1" appends="YES" id="5Lo-vP-Wv9"/>
+                                        </connections>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="patrol-boat" translatesAutoresizingMaskIntoConstraints="NO" id="cp0-yw-BOK" customClass="ShipView" customModule="battleship" customModuleProvider="target">
+                                        <rect key="frame" x="381" y="53" width="90" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="5uP-cT-8Bu" appends="YES" id="Xy9-CN-rQy"/>
+                                            <outletCollection property="gestureRecognizers" destination="fzx-Cw-DqU" appends="YES" id="HOe-Ds-AMi"/>
+                                        </connections>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="battleship" translatesAutoresizingMaskIntoConstraints="NO" id="dgD-4z-VlA" customClass="ShipView" customModule="battleship" customModuleProvider="target">
+                                        <rect key="frame" x="299" y="0.0" width="180" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="WgC-mh-Sda" appends="YES" id="gQr-Em-1lL"/>
+                                            <outletCollection property="gestureRecognizers" destination="j9k-tY-kbi" appends="YES" id="v0i-Bg-rZT"/>
+                                        </connections>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="carrier" translatesAutoresizingMaskIntoConstraints="NO" id="9Ew-5s-PU0" customClass="ShipView" customModule="battleship" customModuleProvider="target">
+                                        <rect key="frame" x="31" y="0.0" width="225" height="45"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="wvd-j2-sRK" appends="YES" id="fIw-oG-9PL"/>
+                                            <outletCollection property="gestureRecognizers" destination="5FM-bJ-1wd" appends="YES" id="z3h-vS-z0e"/>
+                                        </connections>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="z69-co-TEy"/>
                     </view>
+                    <connections>
+                        <outlet property="shipViewBattleship" destination="dgD-4z-VlA" id="m43-Pt-PcR"/>
+                        <outlet property="shipViewCarrier" destination="9Ew-5s-PU0" id="ZWf-YD-NEu"/>
+                        <outlet property="shipViewCruiser" destination="5XJ-0P-pkX" id="mbz-0b-SUA"/>
+                        <outlet property="shipViewPatrolBoat" destination="cp0-yw-BOK" id="2z6-Qy-RUU"/>
+                        <outlet property="shipViewSubmarine" destination="phN-dC-9ib" id="H2i-R1-jJB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OBg-F2-dx5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="wvd-j2-sRK"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="5FM-bJ-1wd"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="WgC-mh-Sda"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="vz4-Ke-9EP"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="1Vl-uN-6B6"/>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="5uP-cT-8Bu"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="j9k-tY-kbi"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="f4E-7G-TA3"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="jnr-h5-7Q1"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="fzx-Cw-DqU"/>
             </objects>
             <point key="canvasLocation" x="485.74218749999994" y="46.875"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="battleship" width="180" height="45"/>
+        <image name="carrier" width="225" height="45"/>
+        <image name="cruiser" width="135" height="45"/>
+        <image name="patrol-boat" width="90" height="45"/>
+        <image name="submarine" width="135" height="45"/>
+    </resources>
 </document>
