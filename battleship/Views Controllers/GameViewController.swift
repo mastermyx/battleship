@@ -24,17 +24,33 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        setShips()
     }
+
+    
+    
     
     
     func setShips() {
+        self.shipViewCarrier.shipType = .carrier
+        self.shipViewCarrier.store()
         
+        self.shipViewCruiser.shipType = .cruiser
+        self.shipViewCruiser.store()
+        
+        self.shipViewSubmarine.shipType = .submarine
+        self.shipViewSubmarine.store()
+        
+        self.shipViewPatrolBoat.shipType = .patrolBoat
+        self.shipViewPatrolBoat.store()
+    
+        self.shipViewBattleship.shipType = .battleship
+        self.shipViewBattleship.store()
     }
 
 

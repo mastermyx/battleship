@@ -19,6 +19,23 @@ enum GameState {
     case enemyPlaying
 }
 
+enum LatchState {
+    case zeroLatch
+    case upLatch
+    case downLatch
+    case leftLatch
+    case rightLatch
+    case allLatchUsed
+    case latchSlotExpired
+    case latchSlotActive
+}
+
+
 class Game: NSObject {
 
+    var latch : [Int] = []
+    var up : [Int] = []
+    var down : [Int] = []
+    var left : [Int] = []
+    var right : [Int] = []
 }

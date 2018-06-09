@@ -9,9 +9,15 @@
 import UIKit
 
 
+protocol GameManagerDelegate {
+    func test()
+}
+
 class GameManager: NSObject {
     
     var sharedInstance = GameManager()
+    
+    let delegate = GameManagerDelegate()
     
     
     
