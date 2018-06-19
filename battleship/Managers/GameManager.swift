@@ -17,7 +17,7 @@ class GameManager: NSObject {
     
     var sharedInstance = GameManager()
     
-    let delegate = GameManagerDelegate()
+    //let delegate = GameManagerDelegate()
     
     
     

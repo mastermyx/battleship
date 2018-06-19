@@ -35,7 +35,8 @@ class GameView: UIView {
             path.removeAllPoints()
             i += 1
         }
-    
+        
+        i = 0
         // Draw horizontal lines
         while (i <= 10) {
             let yPos = CGFloat(i) * cellHeight
@@ -49,4 +50,25 @@ class GameView: UIView {
         
         currentContext?.restoreGState()
     }
+    
+    func doTap(gestureRecognizer: UITapGestureRecognizer) {
+        let tapPoint = gestureRecognizer.location(in: self)
+        
+        if (GameViewController) {
+            
+        }
+    }
+    
+    func addTargetViewAtPoint(point: CGPoint) {
+        
+    }
+    
+//    - (void)doTap:(UITapGestureRecognizer *)gestureRecognizer
+//    {
+//    CGPoint tapPoint = [gestureRecognizer locationInView:self];
+//    // Avoid Trigger when game is over
+//    if ([[(LZGameViewController*)[self delegate] game] gameState] == GameStatePlaying) {
+//    [self addTargetViewAtPoint:tapPoint];
+//    }
+//    }
 }
