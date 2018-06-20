@@ -10,6 +10,8 @@ import UIKit
 
 class GameView: UIView {
 
+    var delegate : GameDelegate?
+    
     override func draw(_ rect: CGRect) {
         
         let currentContext = UIGraphicsGetCurrentContext()
@@ -21,6 +23,7 @@ class GameView: UIView {
         
         let cellWidth = CELLSIZE
         let cellHeight = CELLSIZE
+        
         
         
         var i = 0
@@ -54,7 +57,10 @@ class GameView: UIView {
     func doTap(gestureRecognizer: UITapGestureRecognizer) {
         let tapPoint = gestureRecognizer.location(in: self)
         
-        if (GameViewController) {
+        if (){
+            
+            
+            addTargetViewAtPoint(point: tapPoint)
             
         }
     }

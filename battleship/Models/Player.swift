@@ -8,6 +8,18 @@
 
 import UIKit
 
+enum PlayerNumber {
+    case PlayerOne
+    case PlayerTwo
+}
+
+enum PlayerType {
+    case PlayerHuman
+    case PlayerComputer
+    case HumanVSHuman
+    case HumanVSComputer
+    case Online
+}
 
 
 class Player: NSObject {

@@ -11,16 +11,17 @@ import UIKit
 let dirty_point = CGPoint.init(x: -1, y: -1)
 
 
-enum GameEnd {
+enum GameReason {
     case GameOver
     case GameQuit
 }
 
 enum GameState {
-    case waiting
-    case placing
-    case playing
-    case enemyPlaying
+    case GameStatePreparation
+    case GameStatePlacing
+    case GameStatePlaying
+    case GameStateGameOver
+    case GameStateQuitting
 }
 
 enum LatchState {
@@ -34,18 +35,15 @@ enum LatchState {
     case latchSlotActive
 }
 
-//TODO: add delegate
-//@protocol GameDelegate <NSObject>
-//
-//- (void)GamePreparation;
-//- (void)ShipPlacement;
-//- (void)GamePlaying:(int) player;
-//- (void)GameQuitWithReason: (GameReason) reason;
-//- (void)GameRestart;
-//- (void)GamePlayWithAI;
-//- (void)AIShipPlacement;
-//
-//@end
+protocol GameDelegate {
+    func GamePreparation()
+    func ShipPlacement()
+    func GamePlaying(player: Int)
+    func GameQuitWithReason(reason: GameReason)
+    func GameRestart()
+    func GamePlayWithAI()
+    func AIShipPlacement()
+}
 
 class Game: NSObject {
 
@@ -62,6 +60,9 @@ class Game: NSObject {
     
     var winner : Int?
    
+    var gameState : GameState?
+    var gameMode : Player
+    
     func handleGridTapPoint(point: CGPoint, player : Int) -> Bool {
         let oppPlayer = player == 0 ? playerTwo! : playerOne!;
         

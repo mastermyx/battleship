@@ -13,7 +13,7 @@ class ShipView: UIImageView {
 
     var isRotated = false
     var shipType: ShipType?
-    
+    var player: PlayerNumber?
     var originLocation: CGPoint?
     var originFrame: CGRect?
     var originBounds: CGRect?
