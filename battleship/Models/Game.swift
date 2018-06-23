@@ -61,7 +61,8 @@ class Game: NSObject {
     var winner : Int?
    
     var gameState : GameState?
-    var gameMode : Player
+    var gameMode : PlayerType?
+
     
     func handleGridTapPoint(point: CGPoint, player : Int) -> Bool {
         let oppPlayer = player == 0 ? playerTwo! : playerOne!;

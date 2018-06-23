@@ -447,6 +447,7 @@
                         <viewLayoutGuide key="safeArea" id="z69-co-TEy"/>
                     </view>
                     <connections>
+                        <outlet property="gameStateLabel" destination="E4q-wA-Xih" id="Uve-ur-VQh"/>
                         <outlet property="shipViewBattleship" destination="dgD-4z-VlA" id="m43-Pt-PcR"/>
                         <outlet property="shipViewCarrier" destination="9Ew-5s-PU0" id="ZWf-YD-NEu"/>
                         <outlet property="shipViewCruiser" destination="5XJ-0P-pkX" id="mbz-0b-SUA"/>
@@ -455,16 +456,40 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="OBg-F2-dx5" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="wvd-j2-sRK"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="5FM-bJ-1wd"/>
-                <panGestureRecognizer minimumNumberOfTouches="1" id="WgC-mh-Sda"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="wvd-j2-sRK">
+                    <connections>
+                        <action selector="shipLongPressReactor:" destination="k5a-Pe-pP3" id="tYT-pO-MCX"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="WgC-mh-Sda">
+                    <connections>
+                        <action selector="shipPanGestureReactor:" destination="k5a-Pe-pP3" id="ZrQ-6E-wxS"/>
+                    </connections>
+                </panGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="vz4-Ke-9EP"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="1Vl-uN-6B6"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="5uP-cT-8Bu"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="j9k-tY-kbi"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="f4E-7G-TA3"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="jnr-h5-7Q1"/>
-                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="fzx-Cw-DqU"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="j9k-tY-kbi">
+                    <connections>
+                        <action selector="shipLongPressReactor:" destination="k5a-Pe-pP3" id="aa8-VA-JOJ"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="f4E-7G-TA3">
+                    <connections>
+                        <action selector="shipLongPressReactor:" destination="k5a-Pe-pP3" id="pK3-Ed-QFJ"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="jnr-h5-7Q1">
+                    <connections>
+                        <action selector="shipLongPressReactor:" destination="k5a-Pe-pP3" id="2IJ-4K-gdG"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="fzx-Cw-DqU">
+                    <connections>
+                        <action selector="shipLongPressReactor:" destination="k5a-Pe-pP3" id="6MB-mY-4XJ"/>
+                    </connections>
+                </pongPressGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="5FM-bJ-1wd"/>
             </objects>
             <point key="canvasLocation" x="485.74218749999994" y="46.875"/>
         </scene>

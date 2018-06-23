@@ -12,9 +12,10 @@ let CELLSIZE: CGFloat = 45.0
 
 
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GameDelegate {
     
    
+    @IBOutlet weak var gameStateLabel: UILabel!
     
     @IBOutlet weak var shipViewCarrier: ShipView!
     @IBOutlet weak var shipViewCruiser: ShipView!
@@ -32,14 +33,19 @@ class GameViewController: UIViewController {
      @IBOutlet weak var shipHitView : GameView!
     
     var game : Game?
-    let waitView : UIView?
+    var waitView : UIView?
     
     var currentPlayer : PlayerNumber?
+    
+    var lpStartPoint : CGPoint?
+    var lpEndPoint : CGPoint?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
+    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -101,49 +107,328 @@ class GameViewController: UIViewController {
         game!.gameState = .GameStatePreparation
         shipLocationView.delegate = self
         shipHitView.delegate = self
+
+        shipHitView.tapGestureRecognizer = UITapGestureRecognizer(target: self.shipHitView, action: #selector(self.shipHitView.doTap(gestureRecognizer:)))
+        shipHitView.addGestureRecognizer(shipHitView.tapGestureRecognizer!)
+        self.game  = Game()
+        self.game?.playerOne = Player()
+        self.game?.playerTwo = Player()
+        self.gameStateLabel.text = "Battlehip"
+        
+        let alert = UIAlertController(title: "Battleship", message: "Welcome to play Battleship. Please choose different play mode below.", preferredStyle: .alert)
+//        if ([alertView isEqual: [self entryPopView]]) {
+//            if (buttonIndex == 0) {
+//                [[self game] setGameMode: HumanVSHuman];
+//            } else if (buttonIndex == 1) {
+//                [[self game] setGameMode: HumanVSComputer];
+//                [[[self game] playerOne] setType: PlayerHuman];
+//                [[[self game] playerTwo] setType: PlayerComputer];
+//            }
+        alert.addAction(UIAlertAction(title: "Player VS Player", style: .default) { (action:UIAlertAction!) in
+            print("Player VS Player click")
+            self.game!.gameMode = .HumanVSHuman
+            
+        })
+        alert.addAction(UIAlertAction(title: "Player VS AI", style: .default) { (action:UIAlertAction!) in
+            print("Player VS AI click")
+            self.game!.gameMode = .HumanVSComputer
+            self.game!.playerOne!.type = .PlayerHuman
+            self.game!.playerTwo!.type = .PlayerComputer
+        })
+        alert.addAction(UIAlertAction(title: "Online", style: .default) { (action:UIAlertAction!) in
+            print("Online click")
+        })
+        alert.show(self, sender: nil)
+        
+        self.currentPlayer = .PlayerOne
+        self.ShipPlacement()
+        
+
     }
     
     func ShipPlacement() {
-            //TODO
+        self.game!.gameState = .GameStatePlacing
+        self.restoreBoats(playerNumber: self.currentPlayer!)
+        let player = self.currentPlayer! == .PlayerOne ? 1 : 2
+        
+        self.gameStateLabel.text = "Player: \(player) is placing ships, long press ship to rotate"
     }
     
-    func EndShipPlacement() {
-            //TODO
+    @objc func EndShipPlacement() {
+        let playerOne = self.game!.playerOne
+        let playerTwo = self.game!.playerTwo
+        
+        let playerOneReady = playerOne!.ships.count == 5
+        let playerTwoReady = playerTwo!.ships.count == 5
+        
+        if playerOneReady && playerTwoReady {
+            let randomPlayer = arc4random() % 10 < 5 ? PlayerNumber.PlayerOne : PlayerNumber.PlayerTwo
+            self.GamePlaying(player: randomPlayer.hashValue)
+        } else if !playerOneReady {
+            self.navigationItem.rightBarButtonItem = nil
+            self.currentPlayer = PlayerNumber.PlayerOne
+            self.EndShipPlacement()
+        } else if !playerTwoReady {
+            self.navigationItem.rightBarButtonItem = nil
+             // Handle Different Play Mode
+            if self.game!.gameMode! == .HumanVSHuman {
+                self.currentPlayer = PlayerNumber.PlayerTwo
+                self.ShipPlacement()
+            } else {
+                let randomPlayer = arc4random() % 10 < 5 ? PlayerNumber.PlayerOne : PlayerNumber.PlayerTwo
+                self.currentPlayer! = randomPlayer
+                self.AIShipPlacement()
+                self.GamePlayWithAI()
+            }
+        }
     }
     
     func GamePlaying(player: Int) {
-            //TODO
+        self.game!.gameState = .GameStatePlaying
+        self.navigationItem.rightBarButtonItem = nil
+        self.currentPlayer! = player == 0 ? PlayerNumber.PlayerOne : PlayerNumber.PlayerTwo
+        self.gameStateLabel.text = "Player \(player + 1) is playing"
+        // Re-draw with Player Data
+        self.restoreBoats(playerNumber: self.currentPlayer!)
+        self.restoreGridView(playerNumber: self.currentPlayer!)
     }
     
     func GameQuitWithReason(reason: GameReason) {
-            //TODO
+        let alert = UIAlertController(title: "Battleship", message: "Congratulation!!! Player \(self.game!.winner! + 1) wins the game! Want to play again?", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Player VS Player", style: .default) { (action:UIAlertAction!) in
+            print("Play again")
+            self.GameRestart()
+        })
+        alert.show(self, sender: nil)
     }
     
     func GameRestart() {
-            //TODO
+        self.restoreEverything()
+        self.GamePreparation()
     }
     
     func AIShipPlacement() {
-            //TODO
+        self.view .addSubview(self.waitView!)
+        self.doPlacement(shipView: self.shipViewBattleship2)
+        self.doPlacement(shipView: self.shipViewCarrier2)
+        self.doPlacement(shipView: self.shipViewPatrolBoat2)
+        self.doPlacement(shipView: self.shipViewSubmarine2)
+        self.doPlacement(shipView: self.shipViewCruiser2)
+        
+        Timer.scheduledTimer(timeInterval: 2.0, target: self.waitView!, selector: #selector(self.waitView!.removeFromSuperview), userInfo: nil, repeats: false)
     }
     
     func doPlacement(shipView: ShipView) {
             //TODO
+        
+        
+        while (true) {
+            let x = arc4random() % 480 + 30
+            let y = arc4random() % 480 + 100
+            
+            let isRotated = arc4random() % 10 < 5 ? true : false
+            shipView.isRotated = isRotated
+            shipView.center = CGPoint(x: Int(x), y: Int(y))
+            if self .moveShip(shipView: shipView, location: CGPoint(x: Int(x), y: Int(y))) {
+                self.saveShipSegment(shipView: shipView, shipType: shipView.shipType!, playerNumber: PlayerNumber.PlayerTwo)
+                break
+            }
+        }
     }
     
     func GamePlayWithAI() {
-            //TODO
+        self.game!.gameState = .GameStatePlaying
+        
+        if self.currentPlayer! == PlayerNumber.PlayerTwo {
+            self.view .addSubview(waitView!)
+            
+            // Calculate and perform click
+            var retCode = false
+            while (true) {
+                let aiPoint = self.game!.calculateAIHitPoint(hit_f: retCode)
+                
+                retCode = self.shipHitView!.addTargetViewAtPoint(point: aiPoint)
+                if retCode == false {
+                    break;
+                }
+            }
+            // move into next
+            self.nextMove()
+            // remove Wait View
+            Timer.scheduledTimer(timeInterval: 2.0, target: self.waitView!, selector: #selector(self.waitView!.removeFromSuperview), userInfo: nil, repeats: false)
+        } else {
+            //human turn
+            self.GamePlaying(player: PlayerNumber.PlayerOne.rawValue)
+            
+        }
     }
     
-    //shipLongPressReactor
-    
-    //shipPanGestureReactor
-    
-    
-    func moveShip(shipView: ShipView, location: CGPoint) -> Bool {
+    @IBAction func shipLongPressReactor(_ sender: UILongPressGestureRecognizer) {
         
-            //TODO
+        let shipView = sender.view as! ShipView
+        
+        if sender.state == .began {
+            lpStartPoint = shipView.center
+        }
+        
+        if sender.state == .began {
+            UIView.animate(withDuration: 0.3, animations: {
+                var transform = shipView.transform
+                transform = shipView.isRotated ? CGAffineTransform.identity : transform.rotated(by: .pi / 2 )
+                
+                shipView.transform = transform
+                shipView.isRotated = !shipView.isRotated
+            })
+        }
+        // Bring ship view to the front
+        if shipView.superview!.isEqual(self.view) {
+            shipView.center = sender.location(in: self.view)
+            self.view.bringSubview(toFront: shipView)
+        } else {
+            shipView.center = sender.location(in: self.shipLocationView)
+            self.shipLocationView.bringSubview(toFront: shipView)
+        }
+        
+        if sender.state == .changed {
+            shipView.center = shipView.superview!.isEqual(self.view) ? sender.location(in: self.view) : sender.location(in: self.shipLocationView)
+        }
+        
+        if sender.state == .ended {
+            lpEndPoint = shipView.center
+            // move ship to the final point
+            if (!self.moveShip(shipView: shipView, location: lpEndPoint!)) {
+                UIView.animate(withDuration: 0.3, animations: {
+                    var transform = shipView.transform
+                    transform = shipView.isRotated ? CGAffineTransform.identity : transform.rotated(by: .pi / 2 )
+                    
+                    shipView.transform = transform
+                    shipView.isRotated = !shipView.isRotated
+                    
+                    shipView.center = self.lpStartPoint!
+                })
+            } else {
+                //save position
+                self.saveShipSegment(shipView: shipView, shipType: shipView.shipType!, playerNumber: self.currentPlayer!)
+            }
+            
+            
+        }
+    }
+    
+    @IBAction func shipPanGestureReactor(_ sender: UIPanGestureRecognizer) {
+    
+        // Get dragging View
+        
+        let shipView = sender.view as! ShipView
+        
+        if sender.state == .began {
+            lpStartPoint = shipView.center
+        }
+        
+        // Bring ship in front of all other ships
+        if shipView.superview!.isEqual(self.view) {
+            self.view.bringSubview(toFront: shipView)
+        } else {
+            self.shipLocationView.bringSubview(toFront: shipView)
+        }
+        
+        // Get the translation of the gesture
+        
+        let translation = sender.translation(in: shipView.superview)
+        let effectiveTranslation = translation.applying(CGAffineTransform.identity)
+        
+        let newX = shipView.center.x + effectiveTranslation.x
+        let newY = shipView.center.y + effectiveTranslation.y
+        
+        shipView.center = CGPoint(x: newX, y: newY)
+        
+        sender.setTranslation(CGPoint.zero, in: shipView)
+        
+        if sender.state == .ended {
+            self.lpEndPoint = shipView.center
+            
+            if !self.moveShip(shipView: shipView, location: lpEndPoint!) {
+                UIView.animate(withDuration: 0.5, animations: {
+                    shipView.center = self.lpStartPoint!
+                })
+            } else {
+                self .saveShipSegment(shipView: shipView, shipType: shipView.shipType!, playerNumber: self.currentPlayer!)
+            }
+        }
+    }
+    
+
+    
+    
+    func moveShip(shipView: ShipView, location point: CGPoint) -> Bool {
+        // Already containig such ship
+        let endPointOnBoard = self.shipLocationView.convert(point, to: shipView.superview)
+        let frameOnBoard = self.shipLocationView.convert(shipView.frame, to: shipView.superview)
+        
+        if self.shipLocationView.bounds.contains(endPointOnBoard) {
+            var isOverlap = false
+            
+            for
+            
+            
+        }
+        
         return true
+        
+//        // Already containig such ship
+//        CGPoint endPointOnBoard = [[self shipLocationView] convertPoint: point fromView: [shipView superview]];
+//        CGRect frameOnBoard = [[self shipLocationView] convertRect:[shipView frame] fromView:[shipView superview]];
+//
+//        // see if in the board
+//        if (CGRectContainsPoint([[self shipLocationView] bounds], endPointOnBoard))
+//        {
+//            // check if overlap
+//            BOOL isOverlap = NO;
+//            for (LZShipView *subView in [[self shipLocationView] subviews])
+//            {
+//                if (![subView isEqual: shipView] && [subView player] == [shipView player]) {
+//                    if (CGRectIntersectsRect(frameOnBoard, [subView frame]))
+//                    isOverlap = YES;
+//                }
+//            }
+//
+//            if (isOverlap) {
+//                return NO;
+//            }
+//
+//            // Check if ship place is out of bounds
+//            BOOL shipOdd = shipView.bounds.size.width > shipView.bounds.size.height?
+//            fmod(shipView.bounds.size.width / CELLSIZE, 2) == 1
+//            :
+//            fmod(shipView.bounds.size.height / CELLSIZE, 2) == 1;
+//
+//            BOOL shipRotated = shipView.frame.size.width < shipView.frame.size.height;
+//
+//            CGPoint nearestPoint = [self nearestPoint:endPointOnBoard isOdd:shipOdd isRotated:shipRotated];
+//
+//            CGPoint translation = CGPointMake((nearestPoint.x - endPointOnBoard.x), (nearestPoint.y - endPointOnBoard.y));
+//            CGRect checkFrame = CGRectMake(frameOnBoard.origin.x + translation.x, frameOnBoard.origin.y + translation.y, frameOnBoard.size.width, frameOnBoard.size.height);
+//
+//            if (!CGRectContainsRect([[self shipLocationView] bounds], checkFrame)) {
+//                return NO;
+//            }
+//
+//            // Yep, Go ahead
+//            if (![[[self shipLocationView] subviews] containsObject:shipView]) {
+//                // IMPORTANT: To avoid misplacing in the previous superview.
+//                [shipView removeFromSuperview];
+//                [[self shipLocationView] addSubview: shipView];
+//                [shipView setFrame: frameOnBoard];
+//            }
+//
+//            [UIView animateWithDuration:0.3f animations:^{
+//                [shipView setCenter: nearestPoint];
+//                }];
+//
+//            return YES;
+//        }
+//        return NO;
     }
     
     // Method to Avoid Misplacing on the board
@@ -151,38 +436,125 @@ class GameViewController: UIViewController {
             //TODO
     }
     
-    func saveShipSegment(shipView: ShipView, player playerNumber: PlayerNumber) {
-        //TODO
+    func saveShipSegment(shipView: ShipView, shipType:ShipType, playerNumber: PlayerNumber) {
+        let player = playerNumber == .PlayerOne ? self.game!.playerOne : self.game!.playerTwo
+        
+        let ship = self.reuseShipWithType(shipType: shipType, player: playerNumber)
+        ship.saveShipSegments(shipView: shipView)
+        player!.ships.append(ship)
+        // Time to "ready" and trigger next stage
+        shipView.isUserInteractionEnabled = false
+        if player!.ships.count == 5 {
+            self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Ready", style: .plain, target: self, action: #selector(EndShipPlacement))
+        }
     }
     
     func reuseShipWithType(shipType: ShipType, player playerNumber: PlayerNumber) -> Ship {
-            //TODO
+        let player = playerNumber == .PlayerOne ? self.game!.playerOne : self.game!.playerTwo
+        
+        for ship in player!.ships as! [Ship] {
+            if ship.type == shipType {
+                return ship
+            }
+        }
+        
+        let ship = Ship(withType: shipType)
+        return ship
     }
     
-    // alertview
     
     func restoreBoats(playerNumber: PlayerNumber) {
-            //TODO
+        if (playerNumber == PlayerNumber.PlayerOne) {
+            self.shipViewPatrolBoat.isHidden = false
+            self.shipViewCarrier.isHidden = false
+            self.shipViewCruiser.isHidden = false
+            self.shipViewSubmarine.isHidden = false
+            self.shipViewBattleship.isHidden = false
+            
+            self.shipViewPatrolBoat2.isHidden = true
+            self.shipViewCarrier2.isHidden = true
+            self.shipViewCruiser2.isHidden = true
+            self.shipViewSubmarine2.isHidden = true
+            self.shipViewBattleship2.isHidden = true
+        } else {
+            self.shipViewPatrolBoat.isHidden = true
+            self.shipViewCarrier.isHidden = true
+            self.shipViewCruiser.isHidden = true
+            self.shipViewSubmarine.isHidden = true
+            self.shipViewBattleship.isHidden = true
+            
+            self.shipViewPatrolBoat2.isHidden = false
+            self.shipViewCarrier2.isHidden = false
+            self.shipViewCruiser2.isHidden = false
+            self.shipViewSubmarine2.isHidden = false
+            self.shipViewBattleship2.isHidden = false
+        }
     }
     
     func restoreGridView(playerNumber: PlayerNumber) {
-            //TODO
+        self.unlockGridView()
+        
+        for subview in self.shipHitView.subviews {
+            if subview.tag == 10 {
+                subview.isHidden = (playerNumber != PlayerNumber.PlayerOne) ? true : false
+            } else if subview.tag == 11 {
+                subview.isHidden = (playerNumber != PlayerNumber.PlayerTwo) ? true : false
+            }
+        }
+        
+        for subview in self.shipLocationView.subviews {
+            if subview.tag == 10 {
+                subview.isHidden = (playerNumber != PlayerNumber.PlayerOne) ? true : false
+            } else if subview.tag == 11 {
+                subview.isHidden = (playerNumber != PlayerNumber.PlayerTwo) ? true : false
+            }
+        }
     }
     
     func lockupGridView() {
-            //TODO
+        self.shipHitView.isUserInteractionEnabled = false
+        self.shipLocationView.isUserInteractionEnabled = false
     }
     
     func unlockGridView() {
-            //TODO
+        self.shipHitView.isUserInteractionEnabled = true
+        self.shipLocationView.isUserInteractionEnabled = true
     }
     
     func nextMove() {
-            //TODO
+        if self.game!.gameMode == .HumanVSComputer {
+            self.currentPlayer = self.currentPlayer == PlayerNumber.PlayerOne ? PlayerNumber.PlayerTwo : PlayerNumber.PlayerOne
+            self .GamePlayWithAI()
+        } else {
+            if (currentPlayer == PlayerNumber.PlayerOne) {
+                self.GamePlaying(player: PlayerNumber.PlayerTwo.rawValue)
+            } else {
+                self.GamePlaying(player: PlayerNumber.PlayerOne.rawValue)
+            }
+        }
     }
     
     func restoreEverything() {
-            //TODO
+        // Remove all subviews
+        for subview in self.shipLocationView.subviews {
+            subview.removeFromSuperview()
+        }
+        for subview in self.shipHitView.subviews {
+            subview.removeFromSuperview()
+        }
+        
+        // Reset Ship View
+        self.shipViewCarrier.restore()
+        self.shipViewCruiser.restore()
+        self.shipViewBattleship.restore()
+        self.shipViewSubmarine.restore()
+        self.shipViewPatrolBoat.restore()
+        
+        self.shipViewCarrier2.restore()
+        self.shipViewCruiser2.restore()
+        self.shipViewBattleship2.restore()
+        self.shipViewSubmarine2.restore()
+        self.shipViewPatrolBoat2.restore()
     }
     
     

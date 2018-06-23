@@ -11,6 +11,8 @@ import UIKit
 class GameView: UIView {
 
     var delegate : GameDelegate?
+    var tapGestureRecognizer : UITapGestureRecognizer?
+    
     
     override func draw(_ rect: CGRect) {
         
@@ -54,19 +56,19 @@ class GameView: UIView {
         currentContext?.restoreGState()
     }
     
-    func doTap(gestureRecognizer: UITapGestureRecognizer) {
+   @objc func doTap(gestureRecognizer: UITapGestureRecognizer) {
         let tapPoint = gestureRecognizer.location(in: self)
-        
-        if (){
+        //TODO
+        //if (){
             
             
             addTargetViewAtPoint(point: tapPoint)
             
-        }
+        //}
     }
     
-    func addTargetViewAtPoint(point: CGPoint) {
-        
+    func addTargetViewAtPoint(point: CGPoint) -> Bool {
+        return false 
     }
     
 //    - (void)doTap:(UITapGestureRecognizer *)gestureRecognizer
