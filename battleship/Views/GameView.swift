@@ -58,25 +58,75 @@ class GameView: UIView {
     
    @objc func doTap(gestureRecognizer: UITapGestureRecognizer) {
         let tapPoint = gestureRecognizer.location(in: self)
-        //TODO
-        //if (){
-            
-            
-            addTargetViewAtPoint(point: tapPoint)
-            
-        //}
+    
+        if let delegateGameVC = delegate as? GameViewController {
+            if delegateGameVC.game!.gameState == .GameStatePlaying {
+                _ = self.addTargetViewAtPoint(point: tapPoint)
+            }
+        }
     }
     
     func addTargetViewAtPoint(point: CGPoint) -> Bool {
-        return false 
+        let delegateGameVC = delegate as! GameViewController
+        
+        let currentPlayer = delegateGameVC.currentPlayer
+        let locationView = delegateGameVC.shipLocationView
+        
+        let hit_f = delegateGameVC.game!.handleGridTapPoint(point: point, player: currentPlayer!.rawValue)
+
+        let xIndex = point.x / CELLSIZE
+        let yIndex = point.y / CELLSIZE
+        
+        // draw circle or X by ret
+        
+        if hit_f == false  {
+            let targetView = UIView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            targetView.alpha = 0.6
+            targetView.layer.cornerRadius = CELLSIZE / 2.0
+            targetView.backgroundColor = UIColor.gray
+            if (currentPlayer == .PlayerOne) {
+                targetView.tag = 10
+            } else {
+                targetView.tag = 11
+            }
+            self.addSubview(targetView)
+            targetView.isUserInteractionEnabled = false
+        } else {
+            // Add hit mark at location view
+            let targetView = UIView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            targetView.alpha = 0.6
+            targetView.backgroundColor = UIColor.orange
+            if (currentPlayer == .PlayerOne) {
+                targetView.tag = 10
+            } else {
+                targetView.tag = 11
+            }
+            locationView!.addSubview(targetView)
+            targetView.isHidden = true
+            // Add hit mark at hit view
+            let lines = LineView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            if (currentPlayer == .PlayerOne) {
+                lines.tag = 10
+            } else {
+                lines.tag = 11
+            }
+            lines.backgroundColor = self.backgroundColor
+            self.addSubview(lines)
+            lines.isUserInteractionEnabled = false
+            
+        }
+        
+        if !hit_f {
+            delegateGameVC.lockupGridView()
+            delegateGameVC.navigationItem.setRightBarButton(UIBarButtonItem(title: "Next move", style: .plain, target: self.delegate!, action: #selector(delegateGameVC.nextMove)), animated: true)
+        } // If Someone wins?
+        else {
+            if delegateGameVC.game!.isWin() {
+                delegateGameVC.GameQuitWithReason(reason: .GameOver)
+            }
+        }
+        
+        return hit_f
     }
     
-//    - (void)doTap:(UITapGestureRecognizer *)gestureRecognizer
-//    {
-//    CGPoint tapPoint = [gestureRecognizer locationInView:self];
-//    // Avoid Trigger when game is over
-//    if ([[(LZGameViewController*)[self delegate] game] gameState] == GameStatePlaying) {
-//    [self addTargetViewAtPoint:tapPoint];
-//    }
-//    }
 }

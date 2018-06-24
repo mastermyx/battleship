@@ -10,6 +10,7 @@
 		4312BC2520B8497300B8BEC9 /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4312BC2420B8497300B8BEC9 /* Ship.swift */; };
 		4312BC2720B84E4000B8BEC9 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4312BC2620B84E4000B8BEC9 /* Player.swift */; };
 		4312BC2920B854A500B8BEC9 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4312BC2820B854A500B8BEC9 /* Game.swift */; };
+		431E4D4720DFA4C900698F63 /* WaitView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 431E4D4620DFA4C900698F63 /* WaitView.xib */; };
 		436B5ECE20B2DB980034387B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5ECD20B2DB980034387B /* AppDelegate.swift */; };
 		436B5ED320B2DB980034387B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 436B5ED120B2DB980034387B /* Main.storyboard */; };
 		436B5ED520B2DB9A0034387B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 436B5ED420B2DB9A0034387B /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 		4312BC2420B8497300B8BEC9 /* Ship.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		4312BC2620B84E4000B8BEC9 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		4312BC2820B854A500B8BEC9 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		431E4D4620DFA4C900698F63 /* WaitView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WaitView.xib; sourceTree = "<group>"; };
 		436B5ECA20B2DB980034387B /* battleship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = battleship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		436B5ECD20B2DB980034387B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		436B5ED220B2DB980034387B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				438DF9E920B9C8D500FBC925 /* LineView.swift */,
 				438DF9EB20B9D11C00FBC925 /* ShipView.swift */,
 				438DF9ED20B9D6F400FBC925 /* GameView.swift */,
+				431E4D4620DFA4C900698F63 /* WaitView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				436B5ED820B2DB9A0034387B /* LaunchScreen.storyboard in Resources */,
+				431E4D4720DFA4C900698F63 /* WaitView.xib in Resources */,
 				436B5ED520B2DB9A0034387B /* Assets.xcassets in Resources */,
 				436B5ED320B2DB980034387B /* Main.storyboard in Resources */,
 			);

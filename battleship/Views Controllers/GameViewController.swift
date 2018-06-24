@@ -43,7 +43,7 @@ class GameViewController: UIViewController, GameDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        waitView = Bundle.main.loadNibNamed("WaitView", owner: self, options: nil) as! UIView
     }
     
 
@@ -116,14 +116,6 @@ class GameViewController: UIViewController, GameDelegate {
         self.gameStateLabel.text = "Battlehip"
         
         let alert = UIAlertController(title: "Battleship", message: "Welcome to play Battleship. Please choose different play mode below.", preferredStyle: .alert)
-//        if ([alertView isEqual: [self entryPopView]]) {
-//            if (buttonIndex == 0) {
-//                [[self game] setGameMode: HumanVSHuman];
-//            } else if (buttonIndex == 1) {
-//                [[self game] setGameMode: HumanVSComputer];
-//                [[[self game] playerOne] setType: PlayerHuman];
-//                [[[self game] playerTwo] setType: PlayerComputer];
-//            }
         alert.addAction(UIAlertAction(title: "Player VS Player", style: .default) { (action:UIAlertAction!) in
             print("Player VS Player click")
             self.game!.gameMode = .HumanVSHuman
@@ -369,71 +361,83 @@ class GameViewController: UIViewController, GameDelegate {
         if self.shipLocationView.bounds.contains(endPointOnBoard) {
             var isOverlap = false
             
-            for
+            for subview in self.shipLocationView.subviews as! [ShipView] {
+                
+                if !subview.isEqual(shipView) && subview.player == shipView.player {
+                    if frameOnBoard.intersects(subview.frame) {
+                        isOverlap = true
+                    }
+                }
+            }
             
+            if isOverlap {
+                return false
+            }
+            // Check if ship place is out of bounds
             
+            let shipOdd = shipView.bounds.size.width > shipView.bounds.size.height ? fmod(shipView.bounds.size.width / CELLSIZE, 2.0) == 1 : fmod(shipView.bounds.size.height / CELLSIZE, 2.0) == 1
+            
+            let shipRotated = shipView.frame.size.width < shipView.frame.size.height
+            
+            let nearestPoint = self.nearestPoint(endPoint: endPointOnBoard, isOdd: shipOdd, isRotated: shipRotated)
+            let translation = CGPoint(x: (nearestPoint.x - endPointOnBoard.x) , y: (nearestPoint.y - endPointOnBoard.y))
+            
+            let checkFrame = CGRect(x: frameOnBoard.origin.x + translation.x, y: frameOnBoard.origin.y + translation.y, width: frameOnBoard.size.width, height: frameOnBoard.size.height)
+            
+            if !shipLocationView.bounds.contains(checkFrame) {
+                return false
+            }
+            
+            if !self.shipLocationView.subviews.contains(shipView) {
+                shipView.removeFromSuperview()
+                self.shipLocationView.addSubview(shipView)
+                shipView.frame = frameOnBoard
+            }
+            
+            UIView.animate(withDuration: 0.3, animations: {
+                shipView.center = nearestPoint
+            })
+            
+            return true
         }
-        
-        return true
-        
-//        // Already containig such ship
-//        CGPoint endPointOnBoard = [[self shipLocationView] convertPoint: point fromView: [shipView superview]];
-//        CGRect frameOnBoard = [[self shipLocationView] convertRect:[shipView frame] fromView:[shipView superview]];
-//
-//        // see if in the board
-//        if (CGRectContainsPoint([[self shipLocationView] bounds], endPointOnBoard))
-//        {
-//            // check if overlap
-//            BOOL isOverlap = NO;
-//            for (LZShipView *subView in [[self shipLocationView] subviews])
-//            {
-//                if (![subView isEqual: shipView] && [subView player] == [shipView player]) {
-//                    if (CGRectIntersectsRect(frameOnBoard, [subView frame]))
-//                    isOverlap = YES;
-//                }
-//            }
-//
-//            if (isOverlap) {
-//                return NO;
-//            }
-//
-//            // Check if ship place is out of bounds
-//            BOOL shipOdd = shipView.bounds.size.width > shipView.bounds.size.height?
-//            fmod(shipView.bounds.size.width / CELLSIZE, 2) == 1
-//            :
-//            fmod(shipView.bounds.size.height / CELLSIZE, 2) == 1;
-//
-//            BOOL shipRotated = shipView.frame.size.width < shipView.frame.size.height;
-//
-//            CGPoint nearestPoint = [self nearestPoint:endPointOnBoard isOdd:shipOdd isRotated:shipRotated];
-//
-//            CGPoint translation = CGPointMake((nearestPoint.x - endPointOnBoard.x), (nearestPoint.y - endPointOnBoard.y));
-//            CGRect checkFrame = CGRectMake(frameOnBoard.origin.x + translation.x, frameOnBoard.origin.y + translation.y, frameOnBoard.size.width, frameOnBoard.size.height);
-//
-//            if (!CGRectContainsRect([[self shipLocationView] bounds], checkFrame)) {
-//                return NO;
-//            }
-//
-//            // Yep, Go ahead
-//            if (![[[self shipLocationView] subviews] containsObject:shipView]) {
-//                // IMPORTANT: To avoid misplacing in the previous superview.
-//                [shipView removeFromSuperview];
-//                [[self shipLocationView] addSubview: shipView];
-//                [shipView setFrame: frameOnBoard];
-//            }
-//
-//            [UIView animateWithDuration:0.3f animations:^{
-//                [shipView setCenter: nearestPoint];
-//                }];
-//
-//            return YES;
-//        }
-//        return NO;
+        return false
     }
     
     // Method to Avoid Misplacing on the board
     func nearestPoint(endPoint: CGPoint, isOdd: Bool, isRotated: Bool) -> CGPoint {
-            //TODO
+        var newPoint = CGPoint.zero
+        
+        let xIndex = endPoint.x / CELLSIZE
+        let yIndex = endPoint.y / CELLSIZE
+
+        if !isRotated {
+            if isOdd {
+                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
+                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+            } else {
+                if endPoint.x - (xIndex * CELLSIZE) < (CELLSIZE / 2.0) {
+                    newPoint.x = xIndex * CELLSIZE
+                } else {
+                    newPoint.x = (xIndex + 1) * CELLSIZE
+                }
+                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+            }
+            
+        } else {
+            if isOdd {
+                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
+                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+            } else {
+                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
+                if (endPoint.y - (yIndex * CELLSIZE) < (CELLSIZE / 2.0)) {
+                    newPoint.y = yIndex * CELLSIZE
+                } else {
+                    newPoint.y = (xIndex + 1) * CELLSIZE
+                }
+            }
+            
+        }
+        return newPoint
     }
     
     func saveShipSegment(shipView: ShipView, shipType:ShipType, playerNumber: PlayerNumber) {
@@ -521,7 +525,7 @@ class GameViewController: UIViewController, GameDelegate {
         self.shipLocationView.isUserInteractionEnabled = true
     }
     
-    func nextMove() {
+    @objc func nextMove() {
         if self.game!.gameMode == .HumanVSComputer {
             self.currentPlayer = self.currentPlayer == PlayerNumber.PlayerOne ? PlayerNumber.PlayerTwo : PlayerNumber.PlayerOne
             self .GamePlayWithAI()
