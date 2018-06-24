@@ -53,15 +53,20 @@ class Ship: NSObject {
         
         let isRotated = shipView.frame.size.width < shipView.frame.size.height
        
-        let x = shipView.frame.origin.x / CELLSIZE;
-        let y = shipView.frame.origin.y / CELLSIZE;
+        let x : Int  = Int(shipView.frame.origin.x) / CELLSIZE;
+        let y : Int = Int(shipView.frame.origin.y) / CELLSIZE;
         
-        let firstSegment = y * 10 + x;
+        let firstSegment : Int = y * 10 + x;
         var i = 0
         
         while (i < self.length)  {
-            let segment = isRotated ? firstSegment + (CGFloat.init(i) * 10) : firstSegment + CGFloat.init(i)
-            self.segments.append(segment)
+            if isRotated {
+                self.segments.append(CGFloat(firstSegment) + CGFloat(i * 10))
+            } else {
+                self.segments.append(CGFloat(firstSegment) + CGFloat(i))
+            }
+            
+           
             i += 1
         }
     }

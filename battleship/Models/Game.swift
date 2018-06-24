@@ -47,13 +47,13 @@ protocol GameDelegate {
 
 class Game: NSObject {
 
-    var latch : [Int] = []
+    var latch : [Int] = [0, 0, 0, 0]
     
-    var up : [NSValue]?
-    var down : [NSValue]?
-    var left : [NSValue]?
-    var right : [NSValue]?
-    var used : [NSValue]?
+    var up : [NSValue] = []
+    var down : [NSValue] = []
+    var left : [NSValue] = []
+    var right : [NSValue] = []
+    var used : [NSValue] = []
     
     var playerOne : Player?
     var playerTwo : Player?
@@ -67,23 +67,23 @@ class Game: NSObject {
     func handleGridTapPoint(point: CGPoint, player : Int) -> Bool {
         let oppPlayer = player == 0 ? playerTwo! : playerOne!;
         
-        let xIndex = point.x / CELLSIZE
-        let yIndex = point.y / CELLSIZE
+        let xIndex : Int = Int(point.x) / CELLSIZE
+        let yIndex : Int  = Int(point.y) / CELLSIZE
         
-        let segment = yIndex * 10.0 + xIndex;
+        let segment = CGFloat(yIndex) * 10.0 + CGFloat(xIndex);
         
-        let segmentObj = Int(segment)
+        let segmentObj = CGFloat(segment)
             
         var hit_f = false
         
         for ship in oppPlayer.ships as! Array<Ship>{
             var isContained = false
             
-            for number in ship.segments as! Array<Int> {
+            for number in ship.segments as! Array<CGFloat> {
                 if number == segmentObj {
                     isContained = true
                     hit_f = true
-                    for number in ship.hitSegments as! Array<Int> {
+                    for number in ship.hitSegments as! Array<CGFloat> {
                         if number == segmentObj {
                             isContained = false
                             break
@@ -118,7 +118,7 @@ class Game: NSObject {
             }
         }
         
-        if (playerTwoWin || playerTwoWin) {
+        if (playerOneWin || playerTwoWin) {
             winner = playerOneWin ? 0 : 1
         }
         
@@ -175,7 +175,7 @@ class Game: NSObject {
         var i = 0
         while (i < 4) {
             if latch[i] == 1 {
-                isLatched == true
+                isLatched = true
                 break
             }
             i += 1;
@@ -184,11 +184,11 @@ class Game: NSObject {
     }
     
     func resetLatch() {
-        latch = []
-        up?.removeAll()
-        down?.removeAll()
-        left?.removeAll()
-        right?.removeAll()
+        latch = [0, 0, 0, 0]
+        up.removeAll()
+        down.removeAll()
+        left.removeAll()
+        right.removeAll()
     }
     
     func latchState() -> LatchState {
@@ -253,36 +253,36 @@ class Game: NSObject {
             return currentPoint
         }
         if state == .upLatch {
-            if up!.count > 0 {
-                currentPoint = up!.last!.cgPointValue
-                up?.removeLast()
+            if up.count > 0 {
+                currentPoint = up.last!.cgPointValue
+                up.removeLast()
             } else {
                 self.setDirtyBitAtLatchWithState(state: state)
             }
         } else if state == .downLatch {
-            if down!.count > 0 {
-                currentPoint = down!.last!.cgPointValue
-                down!.removeLast()
+            if down.count > 0 {
+                currentPoint = down.last!.cgPointValue
+                down.removeLast()
             } else {
                  self.setDirtyBitAtLatchWithState(state: state)
             }
         } else if state == .leftLatch {
-            if left!.count > 0 {
-                currentPoint = left!.last!.cgPointValue
-                left!.removeLast()
+            if left.count > 0 {
+                currentPoint = left.last!.cgPointValue
+                left.removeLast()
             } else {
                 self.setDirtyBitAtLatchWithState(state: state)
             }
         } else if state == .rightLatch {
-            if right!.count > 0 {
-                currentPoint = right!.last!.cgPointValue
-                right!.removeLast()
+            if right.count > 0 {
+                currentPoint = right.last!.cgPointValue
+                right.removeLast()
             } else {
                 self.setDirtyBitAtLatchWithState(state: state)
             }
         }
         
-        used!.append(NSValue(cgPoint: currentPoint))
+        used.append(NSValue(cgPoint: currentPoint))
         return currentPoint
     }
 
@@ -363,12 +363,16 @@ class Game: NSObject {
             }
             i += 1
         }
-        used!.append(NSValue(cgPoint: currentPoint))
+        
+        
+        
+        used.append(NSValue(cgPoint: currentPoint))
         return currentPoint
     }
     
     func visitedStateWithPoint(point: CGPoint) -> Bool {
-        for value : NSValue in used! {
+  
+        for value : NSValue in used {
             if value.cgPointValue.equalTo(point) {
                 return true
             }
@@ -378,8 +382,8 @@ class Game: NSObject {
     
     
     func regeneratePoint () -> CGPoint {
-        var cellX = 0
-        var cellY = 0
+        var cellX : Int = 0
+        var cellY : Int = 0
         
         var loop = true
         
@@ -402,33 +406,33 @@ class Game: NSObject {
             if cellY - i >= 0 {
                 let upPoint = CGPoint(x: cellX * Int(CELLSIZE), y: (cellY - i) * Int(CELLSIZE))
                 if visitedStateWithPoint(point: upPoint) == false {
-                    up!.append(NSValue(cgPoint: upPoint))
+                    up.append(NSValue(cgPoint: upPoint))
                 }
             }
             // down
             if cellY + i < 10 {
                 let downPoint = CGPoint(x: cellX * Int(CELLSIZE), y: (cellY + i) * Int(CELLSIZE))
                 if visitedStateWithPoint(point: downPoint) == false {
-                    down!.append(NSValue(cgPoint: downPoint))
+                    down.append(NSValue(cgPoint: downPoint))
                 }
             }
             // left
             if cellX - i >= 0 {
                 let leftPoint = CGPoint(x: (cellX - i) * Int(CELLSIZE), y: cellY * Int(CELLSIZE))
                 if visitedStateWithPoint(point: leftPoint) == false {
-                    left!.append(NSValue(cgPoint: leftPoint))
+                    left.append(NSValue(cgPoint: leftPoint))
                 }
             }
             // right
             if cellX + i < 10 {
                 let rightPoint = CGPoint(x: (cellX + i) * Int(CELLSIZE), y: cellY * Int(CELLSIZE))
                 if visitedStateWithPoint(point: rightPoint) == false {
-                    right!.append(NSValue(cgPoint: rightPoint))
+                    right.append(NSValue(cgPoint: rightPoint))
                 }
             }
             i -= 1
         }
-        used!.append(NSValue(cgPoint: currentPoint))
+        used.append(NSValue(cgPoint: currentPoint))
         return currentPoint
     }
     

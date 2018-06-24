@@ -16,6 +16,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+      
+        let naviVC = UINavigationController()
+        
+        
+        let vc = GameViewController(nibName: "GameView", bundle: nil)
+        self.window?.rootViewController = naviVC
+        naviVC.pushViewController(vc, animated: false)
+        self.window?.backgroundColor = UIColor.white
+        self.window?.makeKeyAndVisible()
+        
+//        self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+//        // Override point for customization after application launch.
+//        UINavigationController *naviVC = [[UINavigationController alloc] init];
+//        LZGameViewController *gameViewController = [[LZGameViewController alloc] initWithNibName:@"GameView" bundle:nil];
+//        [self.window setRootViewController: naviVC];
+//        [naviVC pushViewController:gameViewController animated:NO];
+//        self.window.backgroundColor = [UIColor whiteColor];
+//        [self.window makeKeyAndVisible];
         return true
     }
 

@@ -24,12 +24,12 @@ class LineView: UIView {
         let y = rect.origin.y
         
         path.move(to: CGPoint(x: x, y: y))
-        path.addLine(to: CGPoint(x: x + CELLSIZE, y: y + CELLSIZE))
+        path.addLine(to: CGPoint(x: x + CGFloat(CELLSIZE), y: y + CGFloat(CELLSIZE)))
         path.stroke()
         path.removeAllPoints()
         
-        path.move(to: CGPoint(x: x + CELLSIZE, y: y))
-        path.addLine(to: CGPoint(x: x, y: y + CELLSIZE))
+        path.move(to: CGPoint(x: x + CGFloat(CELLSIZE), y: y))
+        path.addLine(to: CGPoint(x: x, y: y + CGFloat(CELLSIZE)))
         path.stroke()
         path.removeAllPoints()
 

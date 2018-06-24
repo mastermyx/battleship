@@ -23,8 +23,8 @@ class GameView: UIView {
         
         UIColor.blue.setStroke()
         
-        let cellWidth = CELLSIZE
-        let cellHeight = CELLSIZE
+        let cellWidth : Int = CELLSIZE
+        let cellHeight : Int = CELLSIZE
         
         
         
@@ -32,10 +32,10 @@ class GameView: UIView {
         
         // Draw vertical lines
         while (i <= 10) {
-            let xPos = CGFloat(i) * cellWidth
+            let xPos : Int = i * cellWidth
             
-            path.move(to: CGPoint(x: xPos, y: rect.origin.y))
-            path.addLine(to: CGPoint(x: xPos, y: rect.size.height))
+            path.move(to: CGPoint(x: CGFloat(xPos), y: rect.origin.y))
+            path.addLine(to: CGPoint(x: CGFloat(xPos), y: rect.size.height))
             path.stroke()
             path.removeAllPoints()
             i += 1
@@ -44,10 +44,10 @@ class GameView: UIView {
         i = 0
         // Draw horizontal lines
         while (i <= 10) {
-            let yPos = CGFloat(i) * cellHeight
+            let yPos : Int = i * cellHeight
             
-            path.move(to: CGPoint(x: rect.origin.x, y: yPos))
-            path.addLine(to: CGPoint(x: rect.size.width, y: yPos))
+            path.move(to: CGPoint(x: rect.origin.x, y:  CGFloat(yPos)))
+            path.addLine(to: CGPoint(x: rect.size.width, y:  CGFloat(yPos)))
             path.stroke()
             path.removeAllPoints()
             i += 1
@@ -60,7 +60,7 @@ class GameView: UIView {
         let tapPoint = gestureRecognizer.location(in: self)
     
         if let delegateGameVC = delegate as? GameViewController {
-            if delegateGameVC.game!.gameState == .GameStatePlaying {
+            if delegateGameVC.game.gameState == .GameStatePlaying {
                 _ = self.addTargetViewAtPoint(point: tapPoint)
             }
         }
@@ -72,17 +72,19 @@ class GameView: UIView {
         let currentPlayer = delegateGameVC.currentPlayer
         let locationView = delegateGameVC.shipLocationView
         
-        let hit_f = delegateGameVC.game!.handleGridTapPoint(point: point, player: currentPlayer!.rawValue)
+        let hit_f = delegateGameVC.game.handleGridTapPoint(point: point, player: currentPlayer!.rawValue)
 
-        let xIndex = point.x / CELLSIZE
-        let yIndex = point.y / CELLSIZE
+        let xIndex : Int = Int(point.x) / CELLSIZE
+        let yIndex : Int = Int(point.y) / CELLSIZE
         
         // draw circle or X by ret
         
         if hit_f == false  {
-            let targetView = UIView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            let targetView = UIView(frame: CGRect(x: xIndex * Int(CELLSIZE), y: yIndex * Int(CELLSIZE), width: Int(CELLSIZE), height: Int(CELLSIZE)))
+                
+                
             targetView.alpha = 0.6
-            targetView.layer.cornerRadius = CELLSIZE / 2.0
+            targetView.layer.cornerRadius = CGFloat(CELLSIZE) / 2.0
             targetView.backgroundColor = UIColor.gray
             if (currentPlayer == .PlayerOne) {
                 targetView.tag = 10
@@ -93,7 +95,7 @@ class GameView: UIView {
             targetView.isUserInteractionEnabled = false
         } else {
             // Add hit mark at location view
-            let targetView = UIView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            let targetView = UIView(frame: CGRect(x: xIndex * Int(CELLSIZE), y: yIndex * Int(CELLSIZE), width: Int(CELLSIZE), height: Int(CELLSIZE)))
             targetView.alpha = 0.6
             targetView.backgroundColor = UIColor.orange
             if (currentPlayer == .PlayerOne) {
@@ -104,7 +106,7 @@ class GameView: UIView {
             locationView!.addSubview(targetView)
             targetView.isHidden = true
             // Add hit mark at hit view
-            let lines = LineView(frame: CGRect(x: xIndex * CELLSIZE, y: yIndex * CELLSIZE, width: CELLSIZE, height: CELLSIZE))
+            let lines = LineView(frame: CGRect(x: xIndex * Int(CELLSIZE), y: yIndex * Int(CELLSIZE), width: Int(CELLSIZE), height: Int(CELLSIZE)))
             if (currentPlayer == .PlayerOne) {
                 lines.tag = 10
             } else {
@@ -118,10 +120,12 @@ class GameView: UIView {
         
         if !hit_f {
             delegateGameVC.lockupGridView()
-            delegateGameVC.navigationItem.setRightBarButton(UIBarButtonItem(title: "Next move", style: .plain, target: self.delegate!, action: #selector(delegateGameVC.nextMove)), animated: true)
+           
+                delegateGameVC.navigationItem.setRightBarButton(UIBarButtonItem(title: "Next move", style: .plain, target: self.delegate!, action: #selector(delegateGameVC.nextMove)), animated: true)
+           
         } // If Someone wins?
         else {
-            if delegateGameVC.game!.isWin() {
+            if delegateGameVC.game.isWin() {
                 delegateGameVC.GameQuitWithReason(reason: .GameOver)
             }
         }

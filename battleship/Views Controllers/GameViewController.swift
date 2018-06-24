@@ -8,11 +8,12 @@
 
 import UIKit
 
-let CELLSIZE: CGFloat = 45.0 
+let CELLSIZE = 45
 
 
 
-class GameViewController: UIViewController, GameDelegate {
+
+class GameViewController: UIViewController,UIGestureRecognizerDelegate,  GameDelegate {
     
    
     @IBOutlet weak var gameStateLabel: UILabel!
@@ -32,7 +33,7 @@ class GameViewController: UIViewController, GameDelegate {
      @IBOutlet weak var shipLocationView : GameView!
      @IBOutlet weak var shipHitView : GameView!
     
-    var game : Game?
+    var game = Game()
     var waitView : UIView?
     
     var currentPlayer : PlayerNumber?
@@ -43,7 +44,14 @@ class GameViewController: UIViewController, GameDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        waitView = Bundle.main.loadNibNamed("WaitView", owner: self, options: nil) as! UIView
+        print("viewDidLoad")
+        
+        
+        
+        waitView = Bundle.main.loadNibNamed("WaitView", owner: self, options: nil)!.first as? UIView
+        
+       self.GamePreparation()
+        
     }
     
 
@@ -55,6 +63,7 @@ class GameViewController: UIViewController, GameDelegate {
 
     
     func setShips() {
+        print("setShips")
         self.shipViewCarrier.shipType = .carrier
         self.shipViewCarrier.player = .PlayerOne
         
@@ -104,33 +113,34 @@ class GameViewController: UIViewController, GameDelegate {
     
     func GamePreparation() {
         //TODO
-        game!.gameState = .GameStatePreparation
+        print("GamePreparation")
+        game.gameState = .GameStatePreparation
         shipLocationView.delegate = self
         shipHitView.delegate = self
 
         shipHitView.tapGestureRecognizer = UITapGestureRecognizer(target: self.shipHitView, action: #selector(self.shipHitView.doTap(gestureRecognizer:)))
         shipHitView.addGestureRecognizer(shipHitView.tapGestureRecognizer!)
         self.game  = Game()
-        self.game?.playerOne = Player()
-        self.game?.playerTwo = Player()
+        self.game.playerOne = Player()
+        self.game.playerTwo = Player()
         self.gameStateLabel.text = "Battlehip"
         
         let alert = UIAlertController(title: "Battleship", message: "Welcome to play Battleship. Please choose different play mode below.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Player VS Player", style: .default) { (action:UIAlertAction!) in
             print("Player VS Player click")
-            self.game!.gameMode = .HumanVSHuman
+            self.game.gameMode = .HumanVSHuman
             
         })
         alert.addAction(UIAlertAction(title: "Player VS AI", style: .default) { (action:UIAlertAction!) in
             print("Player VS AI click")
-            self.game!.gameMode = .HumanVSComputer
-            self.game!.playerOne!.type = .PlayerHuman
-            self.game!.playerTwo!.type = .PlayerComputer
+            self.game.gameMode = .HumanVSComputer
+            self.game.playerOne!.type = .PlayerHuman
+            self.game.playerTwo!.type = .PlayerComputer
         })
         alert.addAction(UIAlertAction(title: "Online", style: .default) { (action:UIAlertAction!) in
             print("Online click")
         })
-        alert.show(self, sender: nil)
+        self.present(alert, animated: true, completion: nil)
         
         self.currentPlayer = .PlayerOne
         self.ShipPlacement()
@@ -139,7 +149,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func ShipPlacement() {
-        self.game!.gameState = .GameStatePlacing
+        print("ShipPlacement")
+        self.game.gameState = .GameStatePlacing
         self.restoreBoats(playerNumber: self.currentPlayer!)
         let player = self.currentPlayer! == .PlayerOne ? 1 : 2
         
@@ -147,8 +158,9 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     @objc func EndShipPlacement() {
-        let playerOne = self.game!.playerOne
-        let playerTwo = self.game!.playerTwo
+        print("EndShipPlacement")
+        let playerOne = self.game.playerOne
+        let playerTwo = self.game.playerTwo
         
         let playerOneReady = playerOne!.ships.count == 5
         let playerTwoReady = playerTwo!.ships.count == 5
@@ -163,7 +175,7 @@ class GameViewController: UIViewController, GameDelegate {
         } else if !playerTwoReady {
             self.navigationItem.rightBarButtonItem = nil
              // Handle Different Play Mode
-            if self.game!.gameMode! == .HumanVSHuman {
+            if self.game.gameMode! == .HumanVSHuman {
                 self.currentPlayer = PlayerNumber.PlayerTwo
                 self.ShipPlacement()
             } else {
@@ -176,7 +188,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func GamePlaying(player: Int) {
-        self.game!.gameState = .GameStatePlaying
+        print("GamePlaying")
+        self.game.gameState = .GameStatePlaying
         self.navigationItem.rightBarButtonItem = nil
         self.currentPlayer! = player == 0 ? PlayerNumber.PlayerOne : PlayerNumber.PlayerTwo
         self.gameStateLabel.text = "Player \(player + 1) is playing"
@@ -186,21 +199,24 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func GameQuitWithReason(reason: GameReason) {
-        let alert = UIAlertController(title: "Battleship", message: "Congratulation!!! Player \(self.game!.winner! + 1) wins the game! Want to play again?", preferredStyle: .alert)
+        print("GameQuitWithReason")
+        let alert = UIAlertController(title: "Battleship", message: "Congratulation!!! Player \(self.game.winner! + 1) wins the game! Want to play again?", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Player VS Player", style: .default) { (action:UIAlertAction!) in
             print("Play again")
             self.GameRestart()
         })
-        alert.show(self, sender: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
     func GameRestart() {
+         print("GameRestart")
         self.restoreEverything()
         self.GamePreparation()
     }
     
     func AIShipPlacement() {
+        print("AIShipPlacement")
         self.view .addSubview(self.waitView!)
         self.doPlacement(shipView: self.shipViewBattleship2)
         self.doPlacement(shipView: self.shipViewCarrier2)
@@ -212,9 +228,7 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func doPlacement(shipView: ShipView) {
-            //TODO
-        
-        
+        print("doPlacement")
         while (true) {
             let x = arc4random() % 480 + 30
             let y = arc4random() % 480 + 100
@@ -230,7 +244,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func GamePlayWithAI() {
-        self.game!.gameState = .GameStatePlaying
+         print("GamePlayWithAI")
+        self.game.gameState = .GameStatePlaying
         
         if self.currentPlayer! == PlayerNumber.PlayerTwo {
             self.view .addSubview(waitView!)
@@ -238,7 +253,7 @@ class GameViewController: UIViewController, GameDelegate {
             // Calculate and perform click
             var retCode = false
             while (true) {
-                let aiPoint = self.game!.calculateAIHitPoint(hit_f: retCode)
+                let aiPoint = self.game.calculateAIHitPoint(hit_f: retCode)
                 
                 retCode = self.shipHitView!.addTargetViewAtPoint(point: aiPoint)
                 if retCode == false {
@@ -248,7 +263,7 @@ class GameViewController: UIViewController, GameDelegate {
             // move into next
             self.nextMove()
             // remove Wait View
-            Timer.scheduledTimer(timeInterval: 2.0, target: self.waitView!, selector: #selector(self.waitView!.removeFromSuperview), userInfo: nil, repeats: false)
+            Timer.scheduledTimer(timeInterval: 0.3, target: self.waitView!, selector: #selector(self.waitView!.removeFromSuperview), userInfo: nil, repeats: false)
         } else {
             //human turn
             self.GamePlaying(player: PlayerNumber.PlayerOne.rawValue)
@@ -257,7 +272,7 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     @IBAction func shipLongPressReactor(_ sender: UILongPressGestureRecognizer) {
-        
+        print("shipLongPressReactor")
         let shipView = sender.view as! ShipView
         
         if sender.state == .began {
@@ -309,20 +324,23 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     @IBAction func shipPanGestureReactor(_ sender: UIPanGestureRecognizer) {
-    
+        
         // Get dragging View
         
         let shipView = sender.view as! ShipView
         
         if sender.state == .began {
             lpStartPoint = shipView.center
+            print("shipPanGestureReactor ")
         }
         
         // Bring ship in front of all other ships
         if shipView.superview!.isEqual(self.view) {
             self.view.bringSubview(toFront: shipView)
+            //print("shipPanGestureReactor 1.a")
         } else {
             self.shipLocationView.bringSubview(toFront: shipView)
+           // print("shipPanGestureReactor 1.b")
         }
         
         // Get the translation of the gesture
@@ -330,8 +348,8 @@ class GameViewController: UIViewController, GameDelegate {
         let translation = sender.translation(in: shipView.superview)
         let effectiveTranslation = translation.applying(CGAffineTransform.identity)
         
-        let newX = shipView.center.x + effectiveTranslation.x
-        let newY = shipView.center.y + effectiveTranslation.y
+        let newX : Int = Int(shipView.center.x + effectiveTranslation.x)
+        let newY : Int = Int(shipView.center.y + effectiveTranslation.y)
         
         shipView.center = CGPoint(x: newX, y: newY)
         
@@ -339,12 +357,14 @@ class GameViewController: UIViewController, GameDelegate {
         
         if sender.state == .ended {
             self.lpEndPoint = shipView.center
-            
+            print("shipPanGestureReactor 2 \(lpEndPoint.debugDescription)")
             if !self.moveShip(shipView: shipView, location: lpEndPoint!) {
+                print("shipPanGestureReactor 2.a")
                 UIView.animate(withDuration: 0.5, animations: {
                     shipView.center = self.lpStartPoint!
                 })
             } else {
+                print("shipPanGestureReactor 2.b")
                 self .saveShipSegment(shipView: shipView, shipType: shipView.shipType!, playerNumber: self.currentPlayer!)
             }
         }
@@ -355,10 +375,19 @@ class GameViewController: UIViewController, GameDelegate {
     
     func moveShip(shipView: ShipView, location point: CGPoint) -> Bool {
         // Already containig such ship
-        let endPointOnBoard = self.shipLocationView.convert(point, to: shipView.superview)
-        let frameOnBoard = self.shipLocationView.convert(shipView.frame, to: shipView.superview)
+        print("moveShip ")
+        //let endPointOnBoard = self.shipLocationView.convert(point, to: shipView.superview)
+        //let frameOnBoard = self.shipLocationView.convert(shipView.frame, to: shipView.superview)
+        
+        let endPointOnBoard = shipView.superview!.convert(point, to: self.shipLocationView)
+        let frameOnBoard = shipView.superview!.convert(shipView.frame, to: self.shipLocationView)
+        
+        print("moveShip endpoint:\(endPointOnBoard.debugDescription)\n frameOnBoard:\(frameOnBoard.debugDescription)")
+        
+        
         
         if self.shipLocationView.bounds.contains(endPointOnBoard) {
+            print("moveShip X")
             var isOverlap = false
             
             for subview in self.shipLocationView.subviews as! [ShipView] {
@@ -366,16 +395,18 @@ class GameViewController: UIViewController, GameDelegate {
                 if !subview.isEqual(shipView) && subview.player == shipView.player {
                     if frameOnBoard.intersects(subview.frame) {
                         isOverlap = true
+                        print("moveShip 1")
                     }
                 }
             }
             
             if isOverlap {
                 return false
+                print("moveShip 2")
             }
             // Check if ship place is out of bounds
             
-            let shipOdd = shipView.bounds.size.width > shipView.bounds.size.height ? fmod(shipView.bounds.size.width / CELLSIZE, 2.0) == 1 : fmod(shipView.bounds.size.height / CELLSIZE, 2.0) == 1
+            let shipOdd = shipView.bounds.size.width > shipView.bounds.size.height ? fmod(shipView.bounds.size.width / CGFloat(CELLSIZE), 2.0) == 1 : fmod(shipView.bounds.size.height / CGFloat(CELLSIZE), 2.0) == 1
             
             let shipRotated = shipView.frame.size.width < shipView.frame.size.height
             
@@ -385,6 +416,7 @@ class GameViewController: UIViewController, GameDelegate {
             let checkFrame = CGRect(x: frameOnBoard.origin.x + translation.x, y: frameOnBoard.origin.y + translation.y, width: frameOnBoard.size.width, height: frameOnBoard.size.height)
             
             if !shipLocationView.bounds.contains(checkFrame) {
+                print("moveShip 3")
                 return false
             }
             
@@ -392,6 +424,7 @@ class GameViewController: UIViewController, GameDelegate {
                 shipView.removeFromSuperview()
                 self.shipLocationView.addSubview(shipView)
                 shipView.frame = frameOnBoard
+                print("moveShip 4")
             }
             
             UIView.animate(withDuration: 0.3, animations: {
@@ -400,39 +433,47 @@ class GameViewController: UIViewController, GameDelegate {
             
             return true
         }
+        print("moveShip 5")
         return false
     }
     
     // Method to Avoid Misplacing on the board
     func nearestPoint(endPoint: CGPoint, isOdd: Bool, isRotated: Bool) -> CGPoint {
+        
+        print("nearestPoint")
         var newPoint = CGPoint.zero
         
-        let xIndex = endPoint.x / CELLSIZE
-        let yIndex = endPoint.y / CELLSIZE
+        let xIndex : Int = Int(endPoint.x) / Int(CELLSIZE)
+        let yIndex : Int = Int(endPoint.y) / Int(CELLSIZE)
 
+        let xIndexF = CGFloat(xIndex)
+        let yIndexF = CGFloat(yIndex)
+        
+        let cellsize = CGFloat(CELLSIZE)
+        
         if !isRotated {
             if isOdd {
-                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
-                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+                newPoint.x = xIndexF * cellsize + (cellsize / 2.0)
+                newPoint.y = yIndexF * cellsize + (cellsize / 2.0)
             } else {
-                if endPoint.x - (xIndex * CELLSIZE) < (CELLSIZE / 2.0) {
-                    newPoint.x = xIndex * CELLSIZE
+                if endPoint.x - (xIndexF * cellsize) < (cellsize / 2.0) {
+                    newPoint.x = xIndexF * cellsize
                 } else {
-                    newPoint.x = (xIndex + 1) * CELLSIZE
+                    newPoint.x = (xIndexF + 1) * cellsize
                 }
-                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+                newPoint.y = yIndexF * cellsize + (cellsize / 2.0)
             }
             
         } else {
             if isOdd {
-                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
-                newPoint.y = yIndex * CELLSIZE + (CELLSIZE / 2.0)
+                newPoint.x = xIndexF * cellsize + (cellsize / 2.0)
+                newPoint.y = yIndexF * cellsize + (cellsize / 2.0)
             } else {
-                newPoint.x = xIndex * CELLSIZE + (CELLSIZE / 2.0)
-                if (endPoint.y - (yIndex * CELLSIZE) < (CELLSIZE / 2.0)) {
-                    newPoint.y = yIndex * CELLSIZE
+                newPoint.x = xIndexF * cellsize + (cellsize / 2.0)
+                if (endPoint.y - (yIndexF * cellsize) < (cellsize / 2.0)) {
+                    newPoint.y = yIndexF * cellsize
                 } else {
-                    newPoint.y = (xIndex + 1) * CELLSIZE
+                    newPoint.y = (xIndexF + 1) * cellsize
                 }
             }
             
@@ -441,7 +482,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func saveShipSegment(shipView: ShipView, shipType:ShipType, playerNumber: PlayerNumber) {
-        let player = playerNumber == .PlayerOne ? self.game!.playerOne : self.game!.playerTwo
+        print("saveShipSegment")
+        let player = playerNumber == .PlayerOne ? self.game.playerOne : self.game.playerTwo
         
         let ship = self.reuseShipWithType(shipType: shipType, player: playerNumber)
         ship.saveShipSegments(shipView: shipView)
@@ -454,7 +496,8 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func reuseShipWithType(shipType: ShipType, player playerNumber: PlayerNumber) -> Ship {
-        let player = playerNumber == .PlayerOne ? self.game!.playerOne : self.game!.playerTwo
+        print("reuseShipWithType")
+        let player = playerNumber == .PlayerOne ? self.game.playerOne : self.game.playerTwo
         
         for ship in player!.ships as! [Ship] {
             if ship.type == shipType {
@@ -468,6 +511,7 @@ class GameViewController: UIViewController, GameDelegate {
     
     
     func restoreBoats(playerNumber: PlayerNumber) {
+        print("restoreBoats")
         if (playerNumber == PlayerNumber.PlayerOne) {
             self.shipViewPatrolBoat.isHidden = false
             self.shipViewCarrier.isHidden = false
@@ -496,6 +540,7 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func restoreGridView(playerNumber: PlayerNumber) {
+        print("restoreGridView")
         self.unlockGridView()
         
         for subview in self.shipHitView.subviews {
@@ -516,17 +561,20 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func lockupGridView() {
+        print("lockupGridView")
         self.shipHitView.isUserInteractionEnabled = false
         self.shipLocationView.isUserInteractionEnabled = false
     }
     
     func unlockGridView() {
+        print("unlockGridView")
         self.shipHitView.isUserInteractionEnabled = true
         self.shipLocationView.isUserInteractionEnabled = true
     }
     
     @objc func nextMove() {
-        if self.game!.gameMode == .HumanVSComputer {
+        print("nextMove")
+        if self.game.gameMode == .HumanVSComputer {
             self.currentPlayer = self.currentPlayer == PlayerNumber.PlayerOne ? PlayerNumber.PlayerTwo : PlayerNumber.PlayerOne
             self .GamePlayWithAI()
         } else {
@@ -539,6 +587,7 @@ class GameViewController: UIViewController, GameDelegate {
     }
     
     func restoreEverything() {
+        print("restoreEverything")
         // Remove all subviews
         for subview in self.shipLocationView.subviews {
             subview.removeFromSuperview()
@@ -560,13 +609,4 @@ class GameViewController: UIViewController, GameDelegate {
         self.shipViewSubmarine2.restore()
         self.shipViewPatrolBoat2.restore()
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
