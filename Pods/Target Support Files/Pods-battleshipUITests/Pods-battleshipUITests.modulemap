@@ -1,0 +1,6 @@
+framework module Pods_battleshipUITests {
+  umbrella header "Pods-battleshipUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
