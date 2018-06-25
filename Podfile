@@ -6,7 +6,9 @@ target 'battleship' do
   use_frameworks!
 
   # Pods for battleship
-    pod 'Alamofire'
+  pod 'Alamofire'
+  pod 'Socket.IO-Client-Swift'  
+
   target 'battleshipTests' do
     inherit! :search_paths
     # Pods for testing

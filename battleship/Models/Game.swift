@@ -363,9 +363,6 @@ class Game: NSObject {
             }
             i += 1
         }
-        
-        
-        
         used.append(NSValue(cgPoint: currentPoint))
         return currentPoint
     }

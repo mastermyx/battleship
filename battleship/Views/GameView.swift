@@ -93,15 +93,18 @@ class GameView: UIView {
             }
             self.addSubview(targetView)
             targetView.isUserInteractionEnabled = false
+            
+            
+            
         } else {
             // Add hit mark at location view
             let targetView = UIView(frame: CGRect(x: xIndex * Int(CELLSIZE), y: yIndex * Int(CELLSIZE), width: Int(CELLSIZE), height: Int(CELLSIZE)))
-            targetView.alpha = 0.6
-            targetView.backgroundColor = UIColor.orange
+            targetView.alpha = 0.4
+            targetView.backgroundColor = UIColor.red
             if (currentPlayer == .PlayerOne) {
-                targetView.tag = 10
-            } else {
                 targetView.tag = 11
+            } else {
+                targetView.tag = 10
             }
             locationView!.addSubview(targetView)
             targetView.isHidden = true
@@ -120,7 +123,7 @@ class GameView: UIView {
         
         if !hit_f {
             delegateGameVC.lockupGridView()
-           
+            
                 delegateGameVC.navigationItem.setRightBarButton(UIBarButtonItem(title: "Next move", style: .plain, target: self.delegate!, action: #selector(delegateGameVC.nextMove)), animated: true)
            
         } // If Someone wins?

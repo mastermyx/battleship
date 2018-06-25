@@ -19,13 +19,12 @@
 		436B5EE320B2DB9A0034387B /* battleshipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5EE220B2DB9A0034387B /* battleshipTests.swift */; };
 		436B5EEE20B2DB9A0034387B /* battleshipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5EED20B2DB9A0034387B /* battleshipUITests.swift */; };
 		436B5EFE20B2DD470034387B /* SocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5EFD20B2DD470034387B /* SocketManager.swift */; };
-		436B5F0020B2DD560034387B /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5EFF20B2DD560034387B /* RequestManager.swift */; };
-		436B5F0220B2DD690034387B /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5F0120B2DD690034387B /* GameManager.swift */; };
 		436B5F0420B2DD800034387B /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5F0320B2DD800034387B /* GameViewController.swift */; };
 		436B5F0620B2DD940034387B /* LobbyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 436B5F0520B2DD940034387B /* LobbyViewController.swift */; };
 		438DF9EA20B9C8D500FBC925 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438DF9E920B9C8D500FBC925 /* LineView.swift */; };
 		438DF9EC20B9D11C00FBC925 /* ShipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438DF9EB20B9D11C00FBC925 /* ShipView.swift */; };
 		438DF9EE20B9D6F400FBC925 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438DF9ED20B9D6F400FBC925 /* GameView.swift */; };
+		439F7FC620E0126000FBDDBD /* RequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 439F7FC520E0126000FBDDBD /* RequestManager.swift */; };
 		66A60FBD330D03D84CA678A2 /* Pods_battleship.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8134B7A82DD725C06D00E02B /* Pods_battleship.framework */; };
 		8631295D74B5BEB8BA727730 /* Pods_battleshipTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EF34DB0DBC2FBCB6BBB6FB0 /* Pods_battleshipTests.framework */; };
 		89728C45C3A57ABD45F59C0A /* Pods_battleshipUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B40C734D5317F0AAFF58E66 /* Pods_battleshipUITests.framework */; };
@@ -69,13 +68,12 @@
 		436B5EED20B2DB9A0034387B /* battleshipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = battleshipUITests.swift; sourceTree = "<group>"; };
 		436B5EEF20B2DB9A0034387B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		436B5EFD20B2DD470034387B /* SocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketManager.swift; sourceTree = "<group>"; };
-		436B5EFF20B2DD560034387B /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
-		436B5F0120B2DD690034387B /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
 		436B5F0320B2DD800034387B /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		436B5F0520B2DD940034387B /* LobbyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LobbyViewController.swift; sourceTree = "<group>"; };
 		438DF9E920B9C8D500FBC925 /* LineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
 		438DF9EB20B9D11C00FBC925 /* ShipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShipView.swift; sourceTree = "<group>"; };
 		438DF9ED20B9D6F400FBC925 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		439F7FC520E0126000FBDDBD /* RequestManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestManager.swift; sourceTree = "<group>"; };
 		62E726A47A5125EB290D0FE0 /* Pods-battleshipTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-battleshipTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-battleshipTests/Pods-battleshipTests.release.xcconfig"; sourceTree = "<group>"; };
 		6EF34DB0DBC2FBCB6BBB6FB0 /* Pods_battleshipTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_battleshipTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8134B7A82DD725C06D00E02B /* Pods_battleship.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_battleship.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -183,8 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				436B5EFD20B2DD470034387B /* SocketManager.swift */,
-				436B5EFF20B2DD560034387B /* RequestManager.swift */,
-				436B5F0120B2DD690034387B /* GameManager.swift */,
+				439F7FC520E0126000FBDDBD /* RequestManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -392,10 +389,14 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-battleship/Pods-battleship-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -448,8 +449,7 @@
 				438DF9EC20B9D11C00FBC925 /* ShipView.swift in Sources */,
 				436B5F0420B2DD800034387B /* GameViewController.swift in Sources */,
 				4312BC2920B854A500B8BEC9 /* Game.swift in Sources */,
-				436B5F0020B2DD560034387B /* RequestManager.swift in Sources */,
-				436B5F0220B2DD690034387B /* GameManager.swift in Sources */,
+				439F7FC620E0126000FBDDBD /* RequestManager.swift in Sources */,
 				436B5F0620B2DD940034387B /* LobbyViewController.swift in Sources */,
 				4312BC2720B84E4000B8BEC9 /* Player.swift in Sources */,
 				436B5EFE20B2DD470034387B /* SocketManager.swift in Sources */,

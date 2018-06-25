@@ -46,8 +46,6 @@ class GameViewController: UIViewController,UIGestureRecognizerDelegate,  GameDel
         super.viewDidLoad()
         print("viewDidLoad")
         
-        
-        
         waitView = Bundle.main.loadNibNamed("WaitView", owner: self, options: nil)!.first as? UIView
         
        self.GamePreparation()
@@ -66,36 +64,25 @@ class GameViewController: UIViewController,UIGestureRecognizerDelegate,  GameDel
         print("setShips")
         self.shipViewCarrier.shipType = .carrier
         self.shipViewCarrier.player = .PlayerOne
-        
         self.shipViewCruiser.shipType = .cruiser
         self.shipViewCruiser.player = .PlayerOne
-        
         self.shipViewSubmarine.shipType = .submarine
         self.shipViewSubmarine.player = .PlayerOne
-        
         self.shipViewPatrolBoat.shipType = .patrolBoat
         self.shipViewPatrolBoat.player = .PlayerOne
-       
         self.shipViewBattleship.shipType = .battleship
         self.shipViewBattleship.player = .PlayerOne
-        
     
         self.shipViewCarrier2.shipType = .carrier
         self.shipViewCarrier2.player = .PlayerTwo
-        
         self.shipViewCruiser2.shipType = .cruiser
         self.shipViewCruiser2.player = .PlayerTwo
-        
         self.shipViewSubmarine2.shipType = .submarine
         self.shipViewSubmarine2.player = .PlayerTwo
-        
         self.shipViewPatrolBoat2.shipType = .patrolBoat
         self.shipViewPatrolBoat2.player = .PlayerTwo
-        
         self.shipViewBattleship2.shipType = .battleship
         self.shipViewBattleship2.player = .PlayerTwo
-        
-        
         
         self.shipViewBattleship.store()
         self.shipViewPatrolBoat.store()
@@ -112,7 +99,6 @@ class GameViewController: UIViewController,UIGestureRecognizerDelegate,  GameDel
 
     
     func GamePreparation() {
-        //TODO
         print("GamePreparation")
         game.gameState = .GameStatePreparation
         shipLocationView.delegate = self
